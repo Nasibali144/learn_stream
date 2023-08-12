@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:learn_stream/stream%20three/app.dart';
 import 'package:learn_stream/stream%20three/model.dart';
 import 'package:learn_stream/stream%20three/screen/cart.dart';
 
@@ -14,7 +15,13 @@ class Home extends StatelessWidget {
         actions: [
           Badge(
             alignment: const Alignment(0.8, -0.8),
-            label: const Text("9+"),
+            label: StreamBuilder<Cart>(
+              initialData: cartController.cart,
+              stream: cartController.stream,
+              builder: (context, snapshot) {
+                return Text(snapshot.data?.items.length.toString() ?? "");
+              }
+            ),
             child: IconButton.filled(
               onPressed: () {
                 Navigator.push(context, MaterialPageRoute(builder: (_) => const CartScreen()));
@@ -82,10 +89,10 @@ class Home extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                           children: [
                             IconButton.filled(onPressed: () {
-
+                              cartController.addToCard(product: product, quantity: 1);
                             }, icon: const Icon(Icons.add)),
                             IconButton.filled(onPressed: () {
-
+                              cartController.addToCard(product: product, quantity: -1);
                             }, icon: const Icon(Icons.remove)),
                           ],
                         ),
